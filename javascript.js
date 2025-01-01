@@ -1,83 +1,53 @@
-console.log("Hello World");
+const choices = ["rock", "paper", "scissors"];
+const playerDisplay = document.getElementById("playerDisplay");
+const computerDisplay = document.getElementById("computerDisplay");
+const resultDisplay = document.getElementById("resultDisplay");
+const playerScoreDisplay = document.getElementById("playerScoreDisplay");
+const computerScoreDisplay = document.getElementById("computerScoreDisplay");
+let playerScore = 0;
+let computerScore = 0;
 
-const options = ["rock", "paper", "scissors"];
+function playGame(playerChoice){
+    
+    const computerChoice = choices[Math.floor(Math.random() * 3)]
+    let result = "";
 
-function getComputerChoice(){
-    const choice = options [Math.floor(Math.random() * options.length)];
-    return choice;
-}
-
-function checkWinner(playerSelection, computerSelection){
-    if(playerSelection == computerSelection){
-        return "Tie";
-    }
-    else if(
-        (playerSelection == "rock" && computerSelection == "scissors") ||
-        (playerSelection == "scissors" && computerSelection == "paper") ||
-        (playerSelection == "paper" && computerSelection == "rock")
-    ){
-        return "Player";
+    if(playerChoice === computerChoice){
+        result = "IT'S A TIE!";
     }
     else{
-        return "Computer"
-    }
-}
-
-function playRound(playerSelection, computerSelection){
-    const result = checkWinner(playerSelection, computerSelection);
-    if(result == "Tie"){
-        return "You tied!"
-    }
-    else if(result == "Player"){
-        return `You won this round! ${playerSelection} beats ${computerSelection}`
-    }
-    else{
-        return `The computer won this round... ${computerSelection} beats ${playerSelection}`
-    }
-}
-
-function getPlayerChoice(){
-    let validatedInput = false;
-    while(validatedInput == false){
-        const choice = prompt("Rock, paper or scissors? You decide & see if you can beat the computer");
-        if (choice == null){
-            continue;
-        }
-        const choiceInLower = choice.toLowerCase();
-        if(options.includes(choiceInLower)){
-            validatedInput = true;
-            return choiceInLower;
+        switch(playerChoice){
+            case "rock":
+                result = (computerChoice === "scissors") ? "YOU WIN!" : "YOU LOSE!";
+                break;
+            case "paper":
+                result = (computerChoice === "rock") ? "YOU WIN!" : "YOU LOSE!";
+                break;
+            case "scissors":
+                result = (computerChoice === "paper") ? "YOU WIN!" : "YOU LOSE!";
+                break;
         }
     }
-}
 
-function game(){
-    let scorePlayer = 0;
-    let scoreComputer = 0;
-    console.log("Welcome!")
-    for (let i = 0; i < 5; i++) {
-        const playerSelection = getPlayerChoice();
-        const computerSelection = getComputerChoice();
-        console.log(playRound(playerSelection, computerSelection));
-        console.log("---------------");
-        if(checkWinner(playerSelection, computerSelection) == "Player"){
-            scorePlayer++;
-        }
-        else if(checkWinner(playerSelection, computerSelection) == "Computer"){
-            scoreComputer++;
-        }
-    }
-    console.log("That's the game.")
-    if(scorePlayer > scoreComputer){
-        console.log("You won! Well done!");
-    }
-    else if(scorePlayer < scoreComputer){
-        console.log("The computer won this time... Try again.");
-    }
-    else{
-        console.log("We have a tie game!");
-    }
+    playerDisplay.textContent = `PLAYER: ${playerChoice}`;
+    computerDisplay.textContent = `COMPUTER: ${computerChoice}`;
+    resultDisplay.textContent = result;
 
-}
+    resultDisplay.classList.remove("greenText", "redText", "tieText");
 
-game();
+    switch(result){
+        case "YOU WIN!":
+            resultDisplay.classList.add("greenText");
+            playerScore++;
+            playerScoreDisplay.textContent = playerScore;
+            break;
+        case "YOU LOSE!":
+            resultDisplay.classList.add("redText");
+            computerScore++;
+            computerScoreDisplay.textContent = computerScore
+            break;
+        case "IT'S A TIE!":
+            resultDisplay.classList.add("tieText");
+    }
+} 
+    
